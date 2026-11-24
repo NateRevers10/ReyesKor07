@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" fill="none">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1280" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#05080D"/>
+      <stop offset="0.52" stop-color="#0A111A"/>
+      <stop offset="1" stop-color="#05090F"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="180" y1="40" x2="1080" y2="305" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#152638"/>
+      <stop offset="0.48" stop-color="#28445A"/>
+      <stop offset="1" stop-color="#101C29"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="256" y1="62" x2="1083" y2="261" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4B6D88" stop-opacity="0.52"/>
+      <stop offset="0.5" stop-color="#6C91A9" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#31516A" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="160" x2="1280" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#05080D"/>
+      <stop offset="0.2" stop-color="#05080D" stop-opacity="0"/>
+      <stop offset="0.8" stop-color="#05080D" stop-opacity="0"/>
+      <stop offset="1" stop-color="#05080D"/>
+    </linearGradient>
+    <pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
+      <path d="M0 1H6" stroke="#A9C0D0" stroke-opacity="0.045"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="320" rx="18" fill="url(#background)"/>
+  <path d="M-28 236L238 34H551L300 286H-28V236Z" fill="#0B1420"/>
+  <path d="M1280 52L1013 18L742 289L1048 320L1280 87V52Z" fill="#0D1925"/>
+  <path d="M247 33H556L829 287H511L247 33Z" fill="url(#metal)"/>
+  <path d="M247 33H556L829 287H511L247 33Z" stroke="url(#edge)" stroke-width="1.4"/>
+  <path d="M578 33H856L1115 287H838L578 33Z" fill="#101D2A"/>
+  <path d="M578 33H856L1115 287H838L578 33Z" stroke="#3C5A71" stroke-opacity="0.48" stroke-width="1.2"/>
+  <path d="M0 275H1280" stroke="#36546C" stroke-opacity="0.45"/>
+  <path d="M0 281H1280" stroke="#A8C0D0" stroke-opacity="0.055"/>
+  <path d="M0 40H1280" stroke="#7D9AAF" stroke-opacity="0.09"/>
+  <rect width="1280" height="320" rx="18" fill="url(#grain)"/>
+  <rect width="1280" height="320" rx="18" fill="url(#fade)"/>
+</svg>
