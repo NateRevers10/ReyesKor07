@@ -1,0 +1,28 @@
+
+name: GitHub Metrics
+
+on:
+  schedule:
+    - cron: "17 9 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Generate aggregated contribution calendar
+        uses: lowlighter/metrics@65836723097537a54cd8eb90f61839426b4266b6 # v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: github-metrics.svg
+          base: ""
+          config_output: svg
+          output_action: commit
+          plugin_calendar: yes
+          plugin_calendar_limit: 2
