@@ -1,0 +1,77 @@
+
+name: Test Private Contributions
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  verify-contributions:
+    runs-on: ubuntu-latest
+
+    permissions: {}
+
+    steps:
+      - name: Query aggregated contribution totals
+        env:
+          METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${METRICS_TOKEN:-}" ]]; then
+            echo "::error::METRICS_TOKEN is not configured."
+            exit 1
+          fi
+
+          FROM=$(date -u -d '12 months ago' '+%Y-%m-%dT00:00:00Z')
+          TO=$(date -u '+%Y-%m-%dT23:59:59Z')
+
+          QUERY='query($from: DateTime!, $to: DateTime!) {
+            viewer {
+              contributionsCollection(from: $from, to: $to) {
+                totalCommitContributions
+                totalPullRequestContributions
+                totalIssueContributions
+                totalPullRequestReviewContributions
+                restrictedContributionsCount
+                hasAnyRestrictedContributions
+              }
+            }
+          }'
+
+          PAYLOAD=$(jq -n \
+            --arg query "$QUERY" \
+            --arg from "$FROM" \
+            --arg to "$TO" \
+            '{query: $query, variables: {from: $from, to: $to}}')
+
+          RESPONSE=$(curl --fail --silent --show-error \
+            -X POST https://api.github.com/graphql \
+            -H "Authorization: bearer ${METRICS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD") || {
+              echo "::error::GraphQL request failed. Response body withheld."
+              exit 1
+            }
+
+          if ! printf '%s' "$RESPONSE" | jq -e \
+            '.errors == null and .data.viewer.contributionsCollection != null' \
+            >/dev/null; then
+            echo "::error::GraphQL did not return the expected data. Response withheld."
+            exit 1
+          fi
+
+          echo "Contribution verification successful."
+          echo "Period: $FROM to $TO"
+
+          printf '%s' "$RESPONSE" | jq -r '
+            .data.viewer.contributionsCollection |
+            "Commits: \(.totalCommitContributions)",
+            "Pull Requests: \(.totalPullRequestContributions)",
+            "Issues: \(.totalIssueContributions)",
+            "Pull Request Reviews: \(.totalPullRequestReviewContributions)",
+            "Restricted contributions: \(.restrictedContributionsCount)",
+            "Has restricted contributions: \(.hasAnyRestrictedContributions)"
+          '
